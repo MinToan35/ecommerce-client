@@ -8,6 +8,8 @@ import { ToastContainer } from "react-toastify"
 import { toast } from "react-toastify"
 import { useSelector } from "react-redux"
 import { IRootState } from "../redux/interfaces"
+import { useDispatch } from "react-redux"
+import { refreshToken } from "../redux/actions/authAction"
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -20,6 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
 const Toast: React.FC = () => {
   const { alert } = useSelector((state: IRootState) => state)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (alert) {
@@ -28,6 +31,10 @@ const Toast: React.FC = () => {
       if (alert.error) toast.error(alert.error)
     }
   }, [alert])
+
+  useEffect(() => {
+    dispatch<any>(refreshToken())
+  }, [])
   return (
     <ToastContainer
       position='top-right'

@@ -16,8 +16,8 @@ module.exports = () => {
   const rewrites = () => {
     return [
       {
-        source: "/api_1.0/:slug*",
-        destination: "http://localhost:5000/api_1.0/:slug*" // Proxy to Backend
+        source: "/:slug*",
+        destination: "http://localhost:5000/:slug*" // Proxy to Backend
       }
     ]
   }
