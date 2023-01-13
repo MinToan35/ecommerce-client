@@ -1,0 +1,70 @@
+@use "../scss/" as *;
+@use "./login.scss";
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;900&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  list-style: none;
+  text-decoration: none;
+  border: 0;
+  outline: 0;
+}
+
+html {
+  font-size: 100%;
+  @include size1024 {
+    font-size: 80%;
+  }
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-family;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: $color-primary;
+}
+
+h1 {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  span {
+    font-size: 2.5rem;
+    margin-left: 0.5rem;
+  }
+}
+
+p {
+  span {
+    color: $color-highlight;
+  }
+}
+
+input {
+  font-size: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 2px solid #a0a1a250;
+  width: 100%;
+}
+
+a {
+  padding: 0;
+  margin: 0;
+}
+
+.btn-submit {
+  background-color: $color-btn-submit;
+  width: 100%;
+  height: 3rem;
+  color: $white;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  &:hover {
+    opacity: 0.8;
+  }
+}

@@ -1,0 +1,70 @@
+@use "../scss/" as *;
+
+.auth_page {
+  min-height: 100vh;
+  max-width: 100vw;
+  display: flex;
+  @include size768 {
+    background-image: url("../assets/img-2.jpg");
+    background-position: center top;
+    background-size: cover;
+  }
+  @include size480 {
+    background-image: none;
+  }
+  form {
+    width: 40vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include size1024 {
+      width: 50vw;
+    }
+
+    @include size768 {
+      width: 100vw;
+    }
+    .auth-form {
+      background-color: $white;
+      width: 25vw;
+      @include size768 {
+        width: 60vw;
+        padding: 2rem;
+        border-radius: 1rem;
+      }
+
+      @include size480 {
+        box-shadow: none;
+        width: 80vw;
+      }
+      p {
+        font-size: 0.8rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        gap: 0.25rem;
+        a {
+          font-weight: 600;
+        }
+      }
+      .forgot {
+        padding: 1rem 0;
+      }
+    }
+  }
+
+  .auth_page__right {
+    flex: 1;
+    background-image: url("../assets/img-2.jpg");
+    background-position: center top;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $white;
+    text-shadow: $text-shadow;
+    @include size768 {
+      display: none;
+    }
+  }
+}
