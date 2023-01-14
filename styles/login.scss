@@ -5,7 +5,7 @@
   max-width: 100vw;
   display: flex;
   @include size768 {
-    background-image: url("../assets/img-2.jpg");
+    background-image: url("../public/assets/img-2.jpg");
     background-position: center top;
     background-size: cover;
   }
@@ -55,7 +55,7 @@
 
   .auth_page__right {
     flex: 1;
-    background-image: url("../assets/img-2.jpg");
+    background-image: url("../public/assets/img-2.jpg");
     background-position: center top;
     background-size: cover;
     display: flex;
@@ -63,6 +63,7 @@
     align-items: center;
     color: $white;
     text-shadow: $text-shadow;
+    border-radius: 4rem 0 0 4rem;
     @include size768 {
       display: none;
     }
