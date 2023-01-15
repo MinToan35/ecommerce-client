@@ -1,3 +1,9 @@
+@use "../scss/" as *;
+
 .admin-page {
   position: relative;
+  display: flex;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: $white;
 }

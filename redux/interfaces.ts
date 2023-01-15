@@ -1,11 +1,11 @@
 //import { GLOBALTYPES } from "./actions/globalTypes";
 
-interface IAuthPayload {
+export interface IAuthPayload {
   token?: string
-  user?: any
+  user?: IUser
 }
 
-interface IAlertPayload {
+export interface IAlertPayload {
   loading?: boolean
   success?: string
   error?: string
@@ -33,4 +33,31 @@ export interface IAuthAction {
 export interface IRootState {
   auth: IAuthPayload
   alert: IAlertPayload
+  user: IUserPayload
+}
+
+export interface IUser {
+  avatar: string
+  mobile?: string
+  address?: string
+  gender: string
+  _id: string
+  email: string
+  username: string
+  role: string
+  status: string
+  createdAt: string
+}
+
+//user
+
+export interface IUserAction {
+  type: string
+  payload: IUserPayload
+}
+
+export interface IUserPayload {
+  users?: IUser[]
+  loading?: boolean
+  error?: string
 }

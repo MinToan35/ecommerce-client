@@ -4,6 +4,10 @@ import { logout } from "../redux/actions/authAction"
 import { IRootState } from "../redux/interfaces"
 import { useRouter } from "next/router"
 import Sidebar from "../components/Sidebar"
+import HeaderAdmin from "../components/header-admin"
+import Customer from "../components/admin/Customer"
+import { getUsers } from "../redux/actions/userAction"
+import { createAxios } from "../utils/createInstance"
 const Admin: React.FC = () => {
   const dispatch = useDispatch()
   const router = useRouter()
@@ -20,9 +24,17 @@ const Admin: React.FC = () => {
       router.push("/login")
     }
   }, [auth.user])
+
+  const axiosJWT = createAxios(auth.token, dispatch)
+
+  useEffect(() => {
+    dispatch<any>(getUsers({ axiosJWT, token: auth.token, page: 1, limit: 10 }))
+  }, [])
   return (
     <div className='admin-page'>
       <Sidebar />
+      <HeaderAdmin />
+      <Customer />
     </div>
   )
 }

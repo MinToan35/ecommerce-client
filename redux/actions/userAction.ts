@@ -1,0 +1,39 @@
+import axios from "axios"
+import { Dispatch } from "redux"
+import { GLOBALTYPES } from "./globalTypes"
+import { IAlertAction, IUserAction } from "../interfaces"
+import { AxiosInstance } from "axios"
+
+interface userData {
+  axiosJWT: AxiosInstance
+  token: any
+  page: number
+  limit: number
+}
+
+export const USERTYPE = {
+  LOADING: "user-loading"
+}
+
+export const getUsers = (data: userData) => async (dispatch: Dispatch) => {
+  try {
+    dispatch<IUserAction>({ type: USERTYPE.LOADING, payload: { loading: true } })
+    const res = await data.axiosJWT.get(`/api_1.0/user?page=${data.page}&limit=${data.limit}`, {
+      headers: { Authorization: "Bearer " + data.token }
+    })
+    dispatch<IUserAction>({
+      type: GLOBALTYPES.USER,
+      payload: {
+        users: res.data.users
+      }
+    })
+  } catch (error: any) {
+    console.log(error.response)
+    // dispatch<IUserAction>({
+    //   type: GLOBALTYPES.USER,
+    //   payload: {
+    //     error: error.response.data.msg
+    //   }
+    // })
+  }
+}

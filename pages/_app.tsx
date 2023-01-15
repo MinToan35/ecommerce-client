@@ -10,6 +10,7 @@ import { useSelector } from "react-redux"
 import { IRootState } from "../redux/interfaces"
 import { useDispatch } from "react-redux"
 import { refreshToken } from "../redux/actions/authAction"
+import Loading from "../components/Loading"
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -26,7 +27,6 @@ const Toast: React.FC = () => {
 
   useEffect(() => {
     if (alert) {
-      if (alert.loading) toast.info(alert.loading)
       if (alert.success) toast.success(alert.success)
       if (alert.error) toast.error(alert.error)
     }
@@ -35,6 +35,9 @@ const Toast: React.FC = () => {
   useEffect(() => {
     dispatch<any>(refreshToken())
   }, [])
+
+  if (alert.loading) return <Loading />
+
   return (
     <ToastContainer
       position='top-right'

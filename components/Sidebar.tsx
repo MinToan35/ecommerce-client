@@ -66,14 +66,15 @@ const Sidebar: React.FC = () => {
       {/* ==== main ==== */}
       <div className='sidebar-menu__scroll'>
         <div className='sidebar__menu'>
-          {sideBarItem.map((item) => (
-            <ul className='menu-list'>
+          {sideBarItem.map((item, index) => (
+            <ul className='menu-list' key={index}>
               <li className='menu-title'>{item.title}</li>
-              {item.subMenu.map((it) => (
+              {item.subMenu.map((it, ind) => (
                 <li
                   data-name={it.name}
                   className={`menu-item ${active === it.name ? "active" : ""}`}
                   onClick={handleActive}
+                  key={ind}
                 >
                   <div className='menu-item__header'>
                     <div className='menu-item__left'>
@@ -84,7 +85,7 @@ const Sidebar: React.FC = () => {
                   </div>
 
                   <ul className={`sub-menu ${active === it.name && dropdown === true ? "active" : ""}`}>
-                    {it.items && it.items.map((el) => <li>{el}</li>)}
+                    {it.items && it.items.map((el, num) => <li key={num}>{el}</li>)}
                   </ul>
                 </li>
               ))}

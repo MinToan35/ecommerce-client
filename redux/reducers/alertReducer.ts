@@ -1,19 +1,15 @@
-import { GLOBALTYPES } from "../actions/globalTypes";
-import {AlertAction} from '../interfaces'
+import { GLOBALTYPES } from "../actions/globalTypes"
+import { IAlertAction, IAlertPayload } from "../interfaces"
 
-interface AlertState {
-    [key: string]: any;
-}
+const initialState: IAlertPayload = {}
 
-const initialState: AlertState = {}
-
-const alertReducer =(state=initialState,action:AlertAction):AlertState=>{
-    switch (action.type){
-        case GLOBALTYPES.ALERT:
-            return action.payload;
-        default:
-            return state;
-    }
+const alertReducer = (state = initialState, action: IAlertAction): IAlertPayload => {
+  switch (action.type) {
+    case GLOBALTYPES.ALERT:
+      return action.payload
+    default:
+      return state
+  }
 }
 
 export default alertReducer

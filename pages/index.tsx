@@ -22,7 +22,7 @@ export default function Home() {
   }, [auth.user])
   return (
     <>
-      <button className='btn-submit' onClick={() => dispatch<any>(logout(auth.user._id))}>
+      <button className='btn-submit' onClick={() => dispatch<any>(logout())}>
         Logout
       </button>
     </>

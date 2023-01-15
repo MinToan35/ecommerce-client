@@ -33,10 +33,10 @@ export const login = (data: ILoginData) => async (dispatch: Dispatch) => {
   }
 }
 
-export const logout = (id: string) => async (dispatch: Dispatch) => {
+export const logout = () => async (dispatch: Dispatch) => {
   try {
     dispatch<IAlertAction>({ type: GLOBALTYPES.ALERT, payload: { loading: true } })
-    await axios.post("/api_1.0/auth/logout", { id })
+    await axios.post("/api_1.0/auth/logout")
     dispatch<IAuthAction>({
       type: GLOBALTYPES.AUTH,
       payload: {}
@@ -82,6 +82,7 @@ export const refreshToken = () => async (dispatch: Dispatch) => {
         success: res.data.msg
       }
     })
+    return res.data.accessToken
   } catch (error: any) {
     dispatch<IAlertAction>({
       type: GLOBALTYPES.ALERT,

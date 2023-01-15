@@ -1,9 +1,9 @@
 import { GLOBALTYPES } from "../actions/globalTypes"
-import { IAuthAction, IAuthState } from "../interfaces"
+import { IAuthAction, IAuthPayload } from "../interfaces"
 
-const initialState: IAuthState = {}
+const initialState: IAuthPayload = {}
 
-const authReducer = (state = initialState, action: IAuthAction): IAuthState => {
+const authReducer = (state = initialState, action: IAuthAction): IAuthPayload => {
   switch (action.type) {
     case GLOBALTYPES.AUTH:
       return action.payload
