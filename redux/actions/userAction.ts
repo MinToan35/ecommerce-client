@@ -7,8 +7,6 @@ import { AxiosInstance } from "axios"
 interface userData {
   axiosJWT: AxiosInstance
   token: any
-  page: number
-  limit: number
 }
 
 export const USERTYPE = {
@@ -18,7 +16,7 @@ export const USERTYPE = {
 export const getUsers = (data: userData) => async (dispatch: Dispatch) => {
   try {
     dispatch<IUserAction>({ type: USERTYPE.LOADING, payload: { loading: true } })
-    const res = await data.axiosJWT.get(`/api_1.0/user?page=${data.page}&limit=${data.limit}`, {
+    const res = await data.axiosJWT.get(`/api_1.0/user?page=1&limit=30`, {
       headers: { Authorization: "Bearer " + data.token }
     })
     dispatch<IUserAction>({

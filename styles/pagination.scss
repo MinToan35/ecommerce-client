@@ -1,0 +1,37 @@
+@use "../scss/" as *;
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  .page-info {
+    font-size: 0.8rem;
+  }
+
+  .pageNumbers {
+    list-style: none;
+    display: flex;
+    li {
+      padding: 6px 12px;
+      border: 1px solid $grey;
+      cursor: pointer;
+      background-color: $white;
+      color: $color-secondary;
+
+      &.active {
+        background-color: $color-blue;
+        color: $white;
+      }
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+    .prev {
+      border-radius: 0.25rem 0 0 0.25rem;
+    }
+    .next {
+      border-radius: 0 0.25rem 0.25rem 0;
+    }
+  }
+}

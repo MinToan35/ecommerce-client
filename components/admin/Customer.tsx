@@ -8,13 +8,34 @@ import { getUsers } from "../../redux/actions/userAction"
 import { createAxios } from "../../utils/createInstance"
 import { IRootState } from "../../redux/interfaces"
 import { formatDate } from "../../utils/formatDay"
+import ReactPaginate from "react-paginate"
+import Pagination from "../Pagination"
+import PaginationComponent from "../PaginationComponent"
+
 const Customer: React.FC = () => {
-  const [page, setPage] = useState<number>(1)
-  const [limit, setLimit] = useState<number>(4)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(4)
+  const [searchTerm, setSearchTerm] = useState("")
 
   const dispatch = useDispatch()
   const { auth, user } = useSelector((state: IRootState) => state)
   const axiosJWT = createAxios(auth.token, dispatch)
+
+  //Get curent posts
+  const indexOfLastPost = currentPage * itemsPerPage
+  const indexOfFirstPost = indexOfLastPost - itemsPerPage
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage)
+  }
+
+  const handleSearch = (e: any) => {
+    setSearchTerm(e.target.value)
+  }
+
+  const filteredUsers = user.users?.filter((user) => user.username.toLowerCase().includes(searchTerm.toLowerCase()))
+
+  const currentItems = filteredUsers?.slice(indexOfFirstPost, indexOfLastPost)
   return (
     <div className='customer'>
       <div className='customer-container'>
@@ -27,7 +48,11 @@ const Customer: React.FC = () => {
           <div className='table-header'>
             <div className='table-header__left'>
               <span>Show</span>
-              <select className='table-header__left__select'>
+              <select
+                className='table-header__left__select'
+                value={itemsPerPage}
+                onChange={(e: any) => setItemsPerPage(e.target.value)}
+              >
                 <option value={4}>4</option>
                 <option value={6}>6</option>
                 <option value={8}>8</option>
@@ -36,7 +61,7 @@ const Customer: React.FC = () => {
             </div>
             <div className='table-header__right'>
               <span>Search</span>
-              <input type='search' />
+              <input type='search' onChange={handleSearch} />
             </div>
           </div>
 
@@ -91,7 +116,7 @@ const Customer: React.FC = () => {
                 <th className='sorting-asc'>
                   <button
                     className={`table-title ${user.loading ? "reload" : ""}`}
-                    onClick={() => dispatch<any>(getUsers({ axiosJWT, token: auth.token, page, limit }))}
+                    onClick={() => dispatch<any>(getUsers({ axiosJWT, token: auth.token }))}
                   >
                     <AiOutlineReload />
                   </button>
@@ -99,7 +124,7 @@ const Customer: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {user.users?.map((item, index) => (
+              {currentItems?.map((item, index) => (
                 <tr key={index}>
                   <td className='id'>{item._id}</td>
                   <td>
@@ -123,28 +148,15 @@ const Customer: React.FC = () => {
                   </td>
                 </tr>
               ))}
-              {/*<tr>
-                <td className='id'>#MN0123</td>
-                <td className='customer-name'>
-                  <img src={"/assets/img1.jpg"} alt='avatar' />
-                  <span>William Shipp</span>
-                </td>
-                <td>WilliamShip@gmail.com</td>
-                <td>14 Apr 2022</td>
-                <td>
-                  <div className='status'>Active</div>
-                </td>
-                <td className='actions'>
-                  <button className='edit'>
-                    <TbEdit />
-                  </button>
-                  <button className='delete'>
-                    <FiTrash2 />
-                  </button>
-                </td>
-              </tr>*/}
             </tbody>
           </table>
+
+          <Pagination
+            itemsPerPage={itemsPerPage}
+            currentPage={currentPage}
+            totalItems={filteredUsers?.length || 0}
+            handlePageChange={handlePageChange}
+          />
         </div>
       </div>
     </div>

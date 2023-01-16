@@ -28,7 +28,7 @@ const Admin: React.FC = () => {
   const axiosJWT = createAxios(auth.token, dispatch)
 
   useEffect(() => {
-    dispatch<any>(getUsers({ axiosJWT, token: auth.token, page: 1, limit: 10 }))
+    dispatch<any>(getUsers({ axiosJWT, token: auth.token }))
   }, [])
   return (
     <div className='admin-page'>

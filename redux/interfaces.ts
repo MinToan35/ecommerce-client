@@ -60,4 +60,5 @@ export interface IUserPayload {
   users?: IUser[]
   loading?: boolean
   error?: string
+  total?: number
 }
