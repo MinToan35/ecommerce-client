@@ -8,9 +8,7 @@ import { getUsers } from "../../redux/actions/userAction"
 import { createAxios } from "../../utils/createInstance"
 import { IRootState } from "../../redux/interfaces"
 import { formatDate } from "../../utils/formatDay"
-import ReactPaginate from "react-paginate"
 import Pagination from "../Pagination"
-import PaginationComponent from "../PaginationComponent"
 
 const Customer: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1)
