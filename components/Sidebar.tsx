@@ -4,7 +4,12 @@ import { AiOutlineMenu } from "react-icons/ai"
 import { BsShop, BsChevronDown } from "react-icons/bs"
 import { FiMail } from "react-icons/fi"
 import { BiHome } from "react-icons/bi"
-const Sidebar: React.FC = () => {
+
+interface Props {
+  setRender: React.Dispatch<React.SetStateAction<any>>
+}
+
+const Sidebar: React.FC<Props> = ({ setRender }) => {
   const [active, setActive] = useState<string | null>("")
   const [dropdown, setDropdown] = useState<boolean>(false)
 
@@ -31,7 +36,7 @@ const Sidebar: React.FC = () => {
         {
           name: "manager",
           icon: <BsShop />,
-          items: ["Customers", "Add Product"]
+          items: ["Customers", "Banners"]
         },
         {
           name: "dashboard",
@@ -85,7 +90,12 @@ const Sidebar: React.FC = () => {
                   </div>
 
                   <ul className={`sub-menu ${active === it.name && dropdown === true ? "active" : ""}`}>
-                    {it.items && it.items.map((el, num) => <li key={num}>{el}</li>)}
+                    {it.items &&
+                      it.items.map((el, num) => (
+                        <li key={num}>
+                          <button onClick={() => setRender(el)}>{el}</button>
+                        </li>
+                      ))}
                   </ul>
                 </li>
               ))}

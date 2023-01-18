@@ -1,0 +1,81 @@
+@use "../../scss/" as *;
+
+.banner-admin {
+  padding: calc(70px + 1.5rem) 1.5rem 0 calc(250px + 1.5rem);
+  width: 100%;
+  background-color: $grey;
+  .banner-admin__container__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 1.25rem;
+    h1 {
+      font-size: 1.25rem;
+    }
+  }
+  .banner-admin__content {
+    padding: 2rem;
+    border-radius: 0.25rem;
+
+    width: 100%;
+    .banner-admin__content-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: $white;
+      img {
+        width: 200px;
+      }
+    }
+  }
+}
+
+.modal-delete-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999999;
+  transition: 0.3s ease-in-out;
+  transform: scale(1);
+  &.hidden {
+    transform: scale(0);
+    right: -100%;
+    top: -100%;
+  }
+  .modal-delete {
+    border-radius: 1rem;
+    background-color: $white;
+    width: max-content;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    align-items: flex-end;
+    .modal-delete__main {
+      display: flex;
+
+      align-items: center;
+      gap: 2rem;
+
+      img {
+        width: 400px;
+      }
+    }
+    .btn-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      font-size: 2rem;
+      &:hover {
+        opacity: 0.6;
+      }
+    }
+  }
+}

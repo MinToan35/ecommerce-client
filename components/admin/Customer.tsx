@@ -6,7 +6,7 @@ import { AiOutlineReload } from "react-icons/ai"
 import { useDispatch, useSelector } from "react-redux"
 import { getUsers } from "../../redux/actions/userAction"
 import { createAxios } from "../../utils/createInstance"
-import { IRootState } from "../../redux/interfaces"
+import { IRootState, ITable } from "../../redux/interfaces"
 import { formatDate } from "../../utils/formatDay"
 import Pagination from "../Pagination"
 
@@ -19,7 +19,7 @@ const Customer: React.FC = () => {
   const { auth, user } = useSelector((state: IRootState) => state)
   const axiosJWT = createAxios(auth.token, dispatch)
 
-  //Get curent posts
+  //Get curent users
   const indexOfLastPost = currentPage * itemsPerPage
   const indexOfFirstPost = indexOfLastPost - itemsPerPage
 
@@ -34,6 +34,7 @@ const Customer: React.FC = () => {
   const filteredUsers = user.users?.filter((user) => user.username.toLowerCase().includes(searchTerm.toLowerCase()))
 
   const currentItems = filteredUsers?.slice(indexOfFirstPost, indexOfLastPost)
+
   return (
     <div className='customer'>
       <div className='customer-container'>
@@ -125,12 +126,7 @@ const Customer: React.FC = () => {
               {currentItems?.map((item, index) => (
                 <tr key={index}>
                   <td className='id'>{item._id}</td>
-                  <td>
-                    <div className='customer-name'>
-                      <img src={item.avatar} alt='avatar' />
-                      <span>{item.username}</span>
-                    </div>
-                  </td>
+                  <td></td>
                   <td>{item.email}</td>
                   <td>{formatDate(item.createdAt)}</td>
                   <td>

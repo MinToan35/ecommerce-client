@@ -15,13 +15,14 @@ import Loading from "../components/Loading"
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
+      <Refresh />
       <Component {...pageProps} />
       <Toast />
     </Provider>
   )
 }
 
-const Toast: React.FC = () => {
+const Refresh: React.FC = () => {
   const { alert } = useSelector((state: IRootState) => state)
   const dispatch = useDispatch()
 
@@ -37,7 +38,10 @@ const Toast: React.FC = () => {
   }, [])
 
   if (alert.loading) return <Loading />
+  return <></>
+}
 
+const Toast: React.FC = () => {
   return (
     <ToastContainer
       position='top-right'

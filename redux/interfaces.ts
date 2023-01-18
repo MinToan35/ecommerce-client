@@ -34,6 +34,8 @@ export interface IRootState {
   auth: IAuthPayload
   alert: IAlertPayload
   user: IUserPayload
+  bannerState: IBannerPayload
+  modal: boolean
 }
 
 export interface IUser {
@@ -61,4 +63,51 @@ export interface IUserPayload {
   loading?: boolean
   error?: string
   total?: number
+}
+
+//banner
+
+export interface IBanner {
+  image: string | File | null
+  imageMobile: File | null
+  name: string
+  isShow: boolean
+  user?: string
+  createdAt?: string
+  _id?: string
+}
+
+export interface IBannerPayload {
+  banners?: IBanner[]
+  loading?: boolean
+  error?: string
+  banner?: IBanner
+  _id?: string
+}
+
+export interface IBannerAction {
+  type: string
+  payload: IBannerPayload
+}
+
+//table
+export interface ITable {
+  headers: {
+    title?: string
+    isSort?: boolean
+    key?: string
+  }[]
+  items: any[]
+  buttonHeader?: {
+    content: JSX.Element
+    onClick?: () => void
+  }
+  handleEdit?: (id: string) => void
+  handleDelete?: (id: string) => void
+}
+
+//modal
+export interface IModalAction {
+  type: string
+  payload: boolean
 }

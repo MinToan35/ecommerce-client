@@ -1,0 +1,94 @@
+@use "../../scss/" as *;
+
+.add-banner {
+  padding: calc(70px + 1.5rem) 1.5rem 0 calc(250px + 1.5rem);
+  width: 100%;
+  background-color: $grey;
+  .add-banner__header {
+    padding: 0 0 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    h1 {
+      font-size: 1.25rem;
+    }
+  }
+  form {
+    background-color: $white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: $box-shadow-horizal;
+    h3 {
+      margin-bottom: 0.5rem;
+    }
+    .name {
+      border: 2px solid $color-blue-light;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      width: 100%;
+    }
+    .add-banner__image__container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+
+      grid-gap: 2rem;
+      .image-input-container {
+        position: relative;
+        input[type="file"] {
+          display: none;
+        }
+
+        .custom-file-upload {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: $color-blue-light;
+          border-radius: 1rem;
+          padding: 2rem;
+          cursor: pointer;
+          font-size: 2.5rem;
+          display: flex;
+          gap: 0.5rem;
+          box-shadow: $box-shadow-horizal;
+          height: 100%;
+          span {
+            font-size: 1rem;
+          }
+          img {
+            height: 150px;
+            width: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 0.5rem 0;
+            box-shadow: 10px 10px 10px rgb(0, 0, 0, 0.4);
+          }
+        }
+
+        &:first-child {
+          &::after {
+            content: "";
+            position: absolute;
+            right: -1rem;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: $color-blue-light;
+          }
+        }
+      }
+    }
+
+    .checkbox {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    .btn-save {
+      display: flex;
+      justify-content: flex-end;
+      margin: 1rem 0;
+    }
+  }
+}

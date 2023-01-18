@@ -5,6 +5,7 @@ import { ILoginData, IRootState } from "../redux/interfaces"
 
 import Link from "next/link"
 import { useRouter } from "next/router"
+import Head from "next/head"
 
 const Login: React.FC = () => {
   const dispatch = useDispatch()
@@ -26,12 +27,6 @@ const Login: React.FC = () => {
   }
 
   useEffect(() => {
-    if (typeof window !== "undefined" && typeof document !== "undefined") {
-      document.title = "Login"
-    }
-  }, [])
-
-  useEffect(() => {
     if (auth.user && auth.user.role === "admin") {
       router.push("/admin")
     } else if (auth.user && auth.user.role === "user") {
@@ -40,6 +35,11 @@ const Login: React.FC = () => {
   }, [auth.user])
   return (
     <div className='auth_page'>
+      <Head>
+        <title>Login</title>
+        <meta name='keywords' content='login' />
+        <meta name='description' content='Login page to MT Shop' />
+      </Head>
       <form onSubmit={handleSubmit}>
         <div className='auth-form'>
           <h2>Login</h2>

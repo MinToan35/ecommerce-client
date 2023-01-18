@@ -24,13 +24,13 @@ export const login = (data: ILoginData) => async (dispatch: Dispatch) => {
       }
     })
   } catch (error: any) {
-    console.log(error.response)
-    // dispatch<IAlertAction>({
-    //   type: GLOBALTYPES.ALERT,
-    //   payload: {
-    //     error: error.response.data.msg
-    //   }
-    // })
+    //console.log(error.response)
+    dispatch<IAlertAction>({
+      type: GLOBALTYPES.ALERT,
+      payload: {
+        error: error.response.data.msg
+      }
+    })
   }
 }
 
@@ -50,6 +50,7 @@ export const logout = () => async (dispatch: Dispatch) => {
       }
     })
   } catch (error: any) {
+    //console.log(error.response)
     dispatch<IAlertAction>({
       type: GLOBALTYPES.ALERT,
       payload: {

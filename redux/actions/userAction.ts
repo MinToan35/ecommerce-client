@@ -26,12 +26,12 @@ export const getUsers = (data: userData) => async (dispatch: Dispatch) => {
       }
     })
   } catch (error: any) {
-    console.log(error.response)
-    // dispatch<IUserAction>({
-    //   type: GLOBALTYPES.USER,
-    //   payload: {
-    //     error: error.response.data.msg
-    //   }
-    // })
+    // console.log(error.response)
+    dispatch<IUserAction>({
+      type: GLOBALTYPES.USER,
+      payload: {
+        error: "user fail" //error.response.data.msg
+      }
+    })
   }
 }
