@@ -1,11 +1,10 @@
 import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { IRootState } from "../../redux/interfaces"
-import { BsArrowUp, BsArrowDown, BsEye } from "react-icons/bs"
-import { deleteBanner, getBanners } from "../../redux/actions/bannerAction"
+import { IBanner, IRootState } from "../../redux/interfaces"
+import { BsArrowUp, BsArrowDown, BsEye, BsEyeSlash } from "react-icons/bs"
+import { deleteBanner, getBanners, updateBanner } from "../../redux/actions/bannerAction"
 import { AiOutlineReload } from "react-icons/ai"
 import { createAxios } from "../../utils/createInstance"
-import { IoMdOptions } from "react-icons/io"
 import { TbEdit } from "react-icons/tb"
 import { FiTrash2 } from "react-icons/fi"
 import Pagination from "../Pagination"
@@ -13,9 +12,10 @@ import { GLOBALTYPES } from "../../redux/actions/globalTypes"
 import { FaTimes } from "react-icons/fa"
 interface Props {
   setRender: React.Dispatch<React.SetStateAction<any>>
+  setBanner: React.Dispatch<React.SetStateAction<any>>
 }
 
-const Banner: React.FC<Props> = ({ setRender }) => {
+const Banner: React.FC<Props> = ({ setRender, setBanner }) => {
   const { auth, user, bannerState } = useSelector((state: IRootState) => state)
   const dispatch = useDispatch()
   const axiosJWT = createAxios(auth.token, dispatch)
@@ -30,8 +30,8 @@ const Banner: React.FC<Props> = ({ setRender }) => {
   const indexOfLastPost = currentPage * itemsPerPage
   const indexOfFirstPost = indexOfLastPost - itemsPerPage
 
-  const filterBanners = bannerState.banners?.filter((banner) =>
-    banner.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filterBanners = bannerState.banners?.filter(
+    (banner) => banner?.name && banner.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const currentItems = filterBanners?.slice(indexOfFirstPost, indexOfLastPost)
@@ -41,10 +41,32 @@ const Banner: React.FC<Props> = ({ setRender }) => {
   }
 
   const handleDelete = async () => {
-    console.log(bannerId)
-    await dispatch<any>(deleteBanner({ axiosJWT, token: auth.token, _id: bannerId }))
+    await dispatch<any>(deleteBanner({ axiosJWT, token: auth.token, banner: { _id: bannerId } }))
     setRender("Banners")
     setIsModalDelete(false)
+    dispatch({ type: GLOBALTYPES.MODAL, payload: false })
+  }
+
+  const handleSearch = (e: any) => {
+    setSearchTerm(e.target.value)
+  }
+
+  const handleShow = (item: IBanner | undefined) => {
+    if (!item) return
+    if (bannerState.loading) return
+    dispatch<any>(
+      updateBanner({
+        axiosJWT,
+        token: auth.token,
+        banner: {
+          image: item.image,
+          imageMobile: item.imageMobile,
+          name: item.name,
+          isShow: !item.isShow,
+          _id: item._id
+        }
+      })
+    )
   }
   return (
     <>
@@ -55,7 +77,26 @@ const Banner: React.FC<Props> = ({ setRender }) => {
             + New Banner
           </button>
         </div>
-        <div className='banner-admin__content'>
+        <div className='table-banner'>
+          <div className='table-header'>
+            <div className='table-header__left'>
+              <span>Show</span>
+              <select
+                className='table-header__left__select'
+                value={itemsPerPage}
+                onChange={(e: any) => setItemsPerPage(e.target.value)}
+              >
+                <option value={4}>4</option>
+                <option value={6}>6</option>
+                <option value={8}>8</option>
+              </select>
+              <span>entries</span>
+            </div>
+            <div className='table-header__right'>
+              <span>Search</span>
+              <input type='search' onChange={handleSearch} />
+            </div>
+          </div>
           {bannerState.banners && bannerState.banners.length > 0 ? (
             <>
               <table>
@@ -101,25 +142,30 @@ const Banner: React.FC<Props> = ({ setRender }) => {
                 <tbody>
                   {currentItems?.map((item, index) => (
                     <tr key={index}>
-                      <td>{item.name}</td>
+                      <td>{item?.name}</td>
                       <td className='image'>
-                        {typeof item.image === "string" && <img src={item.image} alt='image' />}
+                        {typeof item?.image === "string" && <img src={item.image} alt='image' />}
                       </td>
                       <td className='imageMobile'>
-                        <div>{typeof item.imageMobile === "string" && <img src={item.imageMobile} alt='image' />}</div>
+                        <div>{typeof item?.imageMobile === "string" && <img src={item.imageMobile} alt='image' />}</div>
                       </td>
                       <td className='actions'>
-                        <button className='show'>
-                          <BsEye />
+                        <button className='show' onClick={() => handleShow(item)}>
+                          {item?.isShow ? <BsEye /> : <BsEyeSlash />}
                         </button>
                         <button className='edit'>
-                          <TbEdit />
+                          <TbEdit
+                            onClick={() => {
+                              setRender("AddBanner")
+                              setBanner(item)
+                            }}
+                          />
                         </button>
                         <button className='delete'>
                           <FiTrash2
                             onClick={() => {
                               setIsModalDelete(true)
-                              setBannerId(item._id)
+                              setBannerId(item?._id)
                               dispatch({ type: GLOBALTYPES.MODAL, payload: true })
                             }}
                           />
@@ -156,7 +202,13 @@ const Banner: React.FC<Props> = ({ setRender }) => {
               <h2>DELETE</h2>
               <p>Do you want to hide products without deleting them?</p>
             </div>
-            <button className='btn-close' onClick={() => setIsModalDelete(false)}>
+            <button
+              className='btn-close'
+              onClick={() => {
+                setIsModalDelete(false)
+                dispatch({ type: GLOBALTYPES.MODAL, payload: false })
+              }}
+            >
               <FaTimes />
             </button>
           </div>

@@ -1,6 +1,6 @@
 import { BANNERTYPES } from "../actions/bannerAction"
 import { GLOBALTYPES } from "../actions/globalTypes"
-import { IBannerAction, IBannerPayload } from "../interfaces"
+import { IBanner, IBannerAction, IBannerPayload } from "../interfaces"
 
 const initialState: IBannerPayload = {
   banners: [],
@@ -18,7 +18,23 @@ const bannerReducer = (state = initialState, action: IBannerAction): IBannerPayl
       if (action.payload.banner) return { ...state, banners: [...state.banners, action.payload.banner], loading: false }
       else return state
     case BANNERTYPES.DELETE:
-      return { ...state, banners: state.banners?.filter((item) => item._id !== action.payload._id), loading: false }
+      return {
+        ...state,
+        banners: state.banners?.filter((item) => item?._id !== action.payload.banner?._id),
+        loading: false
+      }
+    case BANNERTYPES.UPDATE:
+      if (state.banners) {
+        return {
+          ...state,
+          banners: state.banners.map((banner) =>
+            banner?._id === action.payload.banner?._id ? { ...banner, ...action.payload.banner } : banner
+          )
+        }
+      }
+      return {
+        ...state
+      }
     default:
       return state
   }

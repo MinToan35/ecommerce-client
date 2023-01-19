@@ -9,17 +9,22 @@ interface IBannerData {
   token: any
   banners?: IBanner[]
   banner?: IBanner
-  _id?: string
+  //_id?: string
+  image?: File | string
+  imageMobile?: File | string
+  name?: string
+  isShow?: boolean
 }
 
 export const BANNERTYPES = {
   LOADING: "BANNER-LOADING",
   ERROR: "BANNER-ERROR",
   ADD: "ADD-BANNER",
-  DELETE: "DELETE-BANNER"
+  DELETE: "DELETE-BANNER",
+  UPDATE: "UPDATE-BANNER"
 }
 
-export const getBanners = (data: IBannerData) => async (dispatch: Dispatch<IBannerAction>) => {
+export const getBanners = (data: IBannerData) => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: BANNERTYPES.LOADING, payload: { loading: true } })
     const res = await data.axiosJWT.get(`/api_1.0/banner?page=1&limit=30`, {
@@ -80,15 +85,62 @@ export const createBanner = (data: IBannerData) => async (dispatch: Dispatch) =>
 
 export const deleteBanner = (data: IBannerData) => async (dispatch: Dispatch) => {
   try {
-    const { _id, axiosJWT, token } = data
+    const { axiosJWT, token, banner } = data
     dispatch({ type: BANNERTYPES.LOADING, payload: { loading: true } })
-    await axiosJWT.delete(`/api_1.0/banner/${_id}`, {
+    await axiosJWT.delete(`/api_1.0/banner/${data.banner?._id}`, {
       headers: { Authorization: "Bearer " + token }
     })
     dispatch({
       type: BANNERTYPES.DELETE,
-      payload: { _id }
+      payload: { banner }
     })
+  } catch (error: any) {
+    dispatch({
+      type: GLOBALTYPES.ALERT,
+      payload: { error: error.response.data.msg }
+    })
+  }
+}
+
+export const updateBanner = (data: IBannerData) => async (dispatch: Dispatch) => {
+  try {
+    if (!data.banner) return dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Missing info" } })
+    const { axiosJWT, token } = data
+    const { image, imageMobile, name, isShow, _id } = data.banner
+    dispatch({ type: BANNERTYPES.LOADING, payload: { loading: true } })
+
+    let newImage: any
+    let newImageMobile: any
+
+    if (data.banner?.image && typeof data.banner.image !== "string") newImage = await imageUpload(data.banner?.image)
+    if (data.banner?.imageMobile && typeof data.banner.imageMobile !== "string")
+      newImageMobile = await imageUpload(data.banner?.imageMobile)
+
+    dispatch({
+      type: BANNERTYPES.UPDATE,
+      payload: {
+        banner: {
+          _id,
+          image: newImage ? newImage.data.secure_url : image,
+          imageMobile: newImageMobile ? newImageMobile.data.secure_url : imageMobile,
+          name,
+          isShow
+        }
+      }
+    })
+    await axiosJWT.put(
+      `/api_1.0/banner/${_id}`,
+      {
+        image: newImage ? newImage.data.secure_url : image,
+        imageMobile: newImageMobile ? newImageMobile.data.secure_url : imageMobile,
+        name,
+        isShow
+      },
+      {
+        headers: { Authorization: "Bearer " + token }
+      }
+    )
+    dispatch({ type: BANNERTYPES.LOADING, payload: { loading: false } })
   } catch (error: any) {
     dispatch({
       type: GLOBALTYPES.ALERT,

@@ -2,22 +2,24 @@ import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import { GLOBALTYPES } from "../../redux/actions/globalTypes"
 import { IoMdImages } from "react-icons/io"
-import { createBanner } from "../../redux/actions/bannerAction"
+import { createBanner, updateBanner } from "../../redux/actions/bannerAction"
 import { createAxios } from "../../utils/createInstance"
 import { useSelector } from "react-redux"
-import { IRootState } from "../../redux/interfaces"
+import { IBanner, IRootState } from "../../redux/interfaces"
 import { AiOutlineReload } from "react-icons/ai"
 interface Props {
   setRender: React.Dispatch<React.SetStateAction<any>>
+  setBanner: React.Dispatch<React.SetStateAction<any>>
+  banner: IBanner | undefined
 }
 
-const AddBanner: React.FC<Props> = ({ setRender }) => {
+const AddBanner: React.FC<Props> = ({ setRender, banner, setBanner }) => {
   const dispatch = useDispatch()
   const { auth, bannerState } = useSelector((state: IRootState) => state)
-  const [name, setName] = useState("")
+  const [name, setName] = useState(banner?.name || "")
   const [isShow, setIsShow] = useState(true)
-  const [image, setImage] = useState<File | null>(null)
-  const [imageMobile, setImageMobile] = useState<File | null>(null)
+  const [image, setImage] = useState<File | string | null>(banner?.image || null)
+  const [imageMobile, setImageMobile] = useState<File | string | null>(banner?.imageMobile || null)
 
   const axiosJWT = createAxios(auth.token, dispatch)
 
@@ -47,23 +49,37 @@ const AddBanner: React.FC<Props> = ({ setRender }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!image) {
-      dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Please add image." } })
+    if (bannerState.loading) return
+    if (!image || !imageMobile) {
+      return dispatch({ type: GLOBALTYPES.ALERT, payload: { error: "Please add image." } })
     }
-    await dispatch<any>(createBanner({ axiosJWT, token: auth.token, banner: { image, imageMobile, name, isShow } }))
+    if (!banner) {
+      await dispatch<any>(createBanner({ axiosJWT, token: auth.token, banner: { image, imageMobile, name, isShow } }))
+    } else {
+      await dispatch<any>(
+        updateBanner({ axiosJWT, token: auth.token, banner: { image, imageMobile, name, isShow, _id: banner._id } })
+      )
+    }
     setRender("Banners")
+    setBanner("")
   }
   return (
     <div className='add-banner'>
       <div className='add-banner__header'>
-        <h1>Banner</h1>
-        <button className='btn btn-outline' onClick={handleCancel}>
+        <h1>{banner ? "Edit Banner" : "Add Banner"}</h1>
+        <button
+          className='btn btn-outline'
+          onClick={() => {
+            setRender("Banners")
+            setBanner("")
+          }}
+        >
           Cancel
         </button>
       </div>
       <form onSubmit={handleSubmit}>
         <h3>Name</h3>
-        <input className='name' required placeholder='Name' onChange={handleChange} />
+        <input className='name' value={name} required placeholder='Name' onChange={handleChange} />
 
         <h3>Image</h3>
         <div className='add-banner__image__container'>
@@ -71,7 +87,7 @@ const AddBanner: React.FC<Props> = ({ setRender }) => {
             <input id='image-input' type='file' onChange={(e) => handleChangeImages(e, setImage)} accept='image/*' />
             {image ? (
               <label htmlFor='image-input' className='custom-file-upload'>
-                <img src={URL.createObjectURL(image)} alt='image' />
+                <img src={typeof image === "string" ? image : URL.createObjectURL(image)} alt='image' />
               </label>
             ) : (
               <label htmlFor='image-input' className='custom-file-upload'>
@@ -90,7 +106,10 @@ const AddBanner: React.FC<Props> = ({ setRender }) => {
             />
             {imageMobile ? (
               <label htmlFor='image-input-mobile' className='custom-file-upload'>
-                <img src={URL.createObjectURL(imageMobile)} alt='imageMobile' />
+                <img
+                  src={typeof imageMobile === "string" ? imageMobile : URL.createObjectURL(imageMobile)}
+                  alt='imageMobile'
+                />
               </label>
             ) : (
               <label htmlFor='image-input-mobile' className='custom-file-upload'>
@@ -106,6 +125,9 @@ const AddBanner: React.FC<Props> = ({ setRender }) => {
           <label>Show in online store</label>
         </div>
         <div className='btn-save'>
+          <button type='button' className='btn btn-outline' onClick={handleCancel}>
+            Cancel
+          </button>
           <button className='btn' type='submit'>
             {bannerState.loading ? <AiOutlineReload className={`${bannerState.loading ? "reload" : ""}`} /> : "Save"}
           </button>

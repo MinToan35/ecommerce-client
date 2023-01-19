@@ -68,42 +68,27 @@ export interface IUserPayload {
 //banner
 
 export interface IBanner {
-  image: string | File | null
-  imageMobile: File | null
-  name: string
-  isShow: boolean
+  image?: string | File | null
+  imageMobile?: string | File | null
+  name?: string
+  isShow?: boolean
   user?: string
   createdAt?: string
   _id?: string
 }
 
 export interface IBannerPayload {
-  banners?: IBanner[]
+  banners?: (IBanner | undefined)[]
+
   loading?: boolean
   error?: string
   banner?: IBanner
-  _id?: string
+  //_id?: string
 }
 
 export interface IBannerAction {
   type: string
   payload: IBannerPayload
-}
-
-//table
-export interface ITable {
-  headers: {
-    title?: string
-    isSort?: boolean
-    key?: string
-  }[]
-  items: any[]
-  buttonHeader?: {
-    content: JSX.Element
-    onClick?: () => void
-  }
-  handleEdit?: (id: string) => void
-  handleDelete?: (id: string) => void
 }
 
 //modal

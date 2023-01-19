@@ -7,9 +7,10 @@ import { BiHome } from "react-icons/bi"
 
 interface Props {
   setRender: React.Dispatch<React.SetStateAction<any>>
+  setBanner: React.Dispatch<React.SetStateAction<any>>
 }
 
-const Sidebar: React.FC<Props> = ({ setRender }) => {
+const Sidebar: React.FC<Props> = ({ setRender, setBanner }) => {
   const [active, setActive] = useState<string | null>("")
   const [dropdown, setDropdown] = useState<boolean>(false)
 
@@ -93,7 +94,14 @@ const Sidebar: React.FC<Props> = ({ setRender }) => {
                     {it.items &&
                       it.items.map((el, num) => (
                         <li key={num}>
-                          <button onClick={() => setRender(el)}>{el}</button>
+                          <button
+                            onClick={() => {
+                              setRender(el)
+                              setBanner("")
+                            }}
+                          >
+                            {el}
+                          </button>
                         </li>
                       ))}
                   </ul>

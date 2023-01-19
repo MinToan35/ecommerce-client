@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { logout } from "../redux/actions/authAction"
-import { IRootState } from "../redux/interfaces"
+import { IBanner, IRootState } from "../redux/interfaces"
 import { useRouter } from "next/router"
-import Sidebar from "../components/Sidebar"
+import Sidebar from "../components/admin/Sidebar"
 import HeaderAdmin from "../components/header-admin"
 import Customer from "../components/admin/Customer"
 import { getUsers } from "../redux/actions/userAction"
@@ -14,6 +14,7 @@ import { getBanners } from "../redux/actions/bannerAction"
 import AddBanner from "../components/admin/AddBanner"
 const Admin: React.FC = () => {
   const [render, setRender] = useState("Banners")
+  const [banner, setBanner] = useState<IBanner>()
 
   const dispatch = useDispatch()
   const router = useRouter()
@@ -32,6 +33,8 @@ const Admin: React.FC = () => {
     dispatch<any>(getBanners({ axiosJWT, token: auth.token }))
   }, [])
 
+  //console.log("banner", banner)
+
   return (
     <div className={`admin-page ${modal ? "modal" : ""}`}>
       <Head>
@@ -39,11 +42,11 @@ const Admin: React.FC = () => {
         <meta name='keywords' content='admin,MT Shop Admin,admin page' />
         <meta name='description' content='Admin page MT Shop' />
       </Head>
-      <Sidebar setRender={setRender} />
+      <Sidebar setRender={setRender} setBanner={setBanner} />
       <HeaderAdmin />
       {render === "Customers" && <Customer />}
-      {render === "Banners" && <Banner setRender={setRender} />}
-      {render === "AddBanner" && <AddBanner setRender={setRender} />}
+      {render === "Banners" && <Banner setRender={setRender} setBanner={setBanner} />}
+      {render === "AddBanner" && <AddBanner setRender={setRender} banner={banner} setBanner={setBanner} />}
     </div>
   )
 }
